@@ -4,6 +4,7 @@ from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 from data import fetch_data, add_features, prepare_sequences
 from model import StockLSTM
+import pandas as pd
 
 TICKER = "AAPL"
 SEQ_LEN = 60
@@ -11,11 +12,18 @@ EPOCHS = 50
 BATCH_SIZE = 32
 LR = 1e-3
 
+
+
 FEATURE_COLS = ["Close", "Volume", "RSI", "SMA_20", "SMA_50",
                 "MACD", "MACD_signal", "Returns", "Volatility"]
 
 def train():
     df = fetch_data(TICKER)
+
+    print(df.columns)
+    print(type(df["Close"]))
+    print(df["Close"].shape)
+    
     df = add_features(df)
     X_train, y_train, X_test, y_test, scaler = prepare_sequences(
         df, FEATURE_COLS, seq_len=SEQ_LEN

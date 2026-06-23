@@ -7,7 +7,11 @@ from sklearn.preprocessing import MinMaxScaler
 
 def fetch_data(ticker="AAPL", period="5y"):
     df = yf.download(ticker, period=period)
-    df.dropna(inplace=True)
+
+    # Flatten MultiIndex columns
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = df.columns.get_level_values(0)
+
     return df
 
 def add_features(df):
